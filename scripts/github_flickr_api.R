@@ -1,4 +1,4 @@
-# installation and loading of the packages available via cran
+# installation and loading of the packages available via cran ----
 packagename<-c("remotes","geosphere","RPostgreSQL")
 if (length(setdiff(packagename, rownames(installed.packages()))) > 0) {
   install.packages(setdiff(packagename, rownames(installed.packages())),repos = "https://cran.uni-muenster.de/", Ncpus = 16)  
@@ -7,20 +7,21 @@ if (length(setdiff(packagename, rownames(installed.packages()))) > 0) {
 lapply(packagename, require, character.only = T)
 rm(packagename)
 
-# installation and loading of the remote package photosearcher from github
+# installation and loading of the remote package photosearcher from github ----
 remotes::install_github("nfox29/photosearcher")
 library("photosearcher")
 
-# specification of the time period and the country of interest
+# specification of the time period and the country of interest ----
 mindt<-"year-month-day" # definition of the minimum date on which a photo was taken in the provided format
 maxdt<-"year-month-day" # definition of the maximum date on which a photo was taken in the provided format
 maxup<-"year-month-day" # definition of the maximum date on which a photo was uploaded in the provided format
 countryname_english<-"name of the country of interest in english" # country name in english has to be provided
 countryname_native<-"name of the country of interest in the country's native language" # country name in he country's native language has to be provided
 
-# download of the information accessible for all photos in the specified time period
+# download of the information accessible for all photos in the specified time period ----
 area_photos<-photo_search(mindate_taken  = mindt, maxdate_taken = maxdt, maxdate_uploaded= maxup) 
 
+# further preparation of the downloaded information ----
 # extraction of the available information on the users that uploaded the photos 
 social_data<-user_info(user_id=area_photos$owner)
 
@@ -42,8 +43,7 @@ df$nop<-df$latitude
 arph<-merge(arph,df[,c("owner","nop")],by="owner",all.x = T)
 rm(df)
 
-
-# export of the new data set into the data base (in this case a postgres data base but this can be changed)
+# export of the new data set into the data base (in this case a postgres data base but this can be changed) ----
 dbn<-"name of the data base"
 hst<-"name or address of the hosting server"
 pt<-"port number"
@@ -52,7 +52,7 @@ pw<-"password of the user"
 con<-dbConnect(PostgreSQL(),dbname=dbn ,host=hst, port=pt,user=u, password=pw)
 dbWriteTable(con,"arph",arph, row.names=FALSE, overwrite=T)
 
-
+# creation of a new data set that contain information on two consecutive photos of each user in one row ----
 # defining the variables for the latitude and longitude values of the consecutive photo uploaded and the distance between the coordinates of two consecutive photos
 arph$latnext<-NA
 arph$lonnext<-NA
@@ -83,11 +83,10 @@ for (i in 1:length(unique(arph$owner))){
 # (row-)binding all elements of the list into a data frame
 flickrall<-do.call(rbind,lor)
 
-
-# export of the data frame into the data base
+# export of the data frame into the data base ----
 con<-dbConnect(PostgreSQL(),dbname=dbn ,host=hst, port=pt,user=u, password=pw)
 dbWriteTable(con,"flickrall",flickrall, row.names=FALSE, overwrite=T)
 
-# printing "doneall" (this can be useful if the script is run on a remote server in the background)
+# printing "doneall" (this can be useful if the script is run on a remote server in the background) ----
 print("doneall")
 rm(flickrall,lor,arph)
