@@ -1,0 +1,1 @@
+The file in this folder contains the number of passengers boarding an airplane at any airport in Germany per year and destionation country for the years 2017-2021. The statistics are taken from the official air travel statistics of the Statistical Office of Germany and were prepared for easier loading and processing in R. 
