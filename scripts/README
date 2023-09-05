@@ -1,0 +1,10 @@
+This repository provides three scripts:
+
+1) github_flickr_api
+This script can be used to access all information available on the users from a selected country via the public Flickr API. In addition, the data are preprocessed for later analyses. At the end of the script the data set generated is exported into a remote data base. 
+
+2) github_longdistance_mobility
+The data set created in the previous script is imported from a remote data base and then further processed. Among others, distances between the coordinates of the different photos uploaded are calculated, the coordinates are located within political country borders, the places of residence of the users are defined, etc. 
+
+3) github_comparison_with_other_data
+The prepared data set is now used for the comparison with other sources of data. More specifically, the data set generated on the basis of the retrieved information from the Flickr API is compared with the long-distance data set of the Mobility in Germany 2017 survey, the official air travel statistics provided by the Statistical Office of Germany, and other official transportation statistics provided by the Federal Ministry for Digital and Transport of Germany. These comparisons are carried out on the basis of key indicators such as the distances traveled and the regions of the world visited. 
